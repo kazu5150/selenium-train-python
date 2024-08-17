@@ -1,3 +1,6 @@
+# google検索ページにワードを入力して結果を受け取ります
+# 仮装環境で動きます。 source selenium_env/bin/activate
+
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys

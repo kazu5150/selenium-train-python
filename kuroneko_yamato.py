@@ -5,6 +5,9 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
+# 問い合わせ番号を入力して下さい。
+contact_number = input("問い合わせ番号を入力して下さい。")
+
 # WebDriverの初期化（ChromeDriverの場合）
 driver = webdriver.Chrome()
 
@@ -16,7 +19,7 @@ driver.get("https://toi.kuronekoyamato.co.jp/cgi-bin/tneko")
 
 # 問い合わせ番号を入力
 input_field = driver.find_element(By.NAME, "number01")
-input_field.send_keys("3904-5998-3082")  # 画像の番号を使用
+input_field.send_keys(contact_number)  # 画像の番号を使用
 
 # お問い合わせ開始ボタンをクリック
 submit_button = driver.find_element(
@@ -31,7 +34,7 @@ result_element = wait.until(
 # テキストを取得
 result_text = result_element.text
 
-print(result_text)  # "伝票番号未登録" が表示されるはず
+print(f"【{contact_number}】のお荷物：【{result_text}】")  # "伝票番号未登録" が表示されるはず
 
 # ブラウザを閉じる
 driver.quit()

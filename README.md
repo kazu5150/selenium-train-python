@@ -1,3 +1,5 @@
+# spreadsheet url: https://docs.google.com/spreadsheets/d/1PGug0gq780SLrf3mFqHMep1rpr2i6OUqBeXOsPBYH28/edit?gid=0#gid=0
+
 # ヤマト運輸追跡自動化
 
 このプロジェクトは、ヤマト運輸の荷物追跡番号を使用して配送状況を自動的に確認するプロセスを自動化します。Google スプレッドシートから追跡番号を取得し、Selenium を使用して配送状況を確認し、結果をスプレッドシートに更新します。

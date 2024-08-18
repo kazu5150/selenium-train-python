@@ -1,107 +1,73 @@
-# Selenium Google検索自動化
+# spreadsheet url: https://docs.google.com/spreadsheets/d/1PGug0gq780SLrf3mFqHMep1rpr2i6OUqBeXOsPBYH28/edit?gid=0#gid=0
 
-このプロジェクトは、PythonとSeleniumを使用してGoogle検索を自動化し、検索結果を取得する方法を示しています。
+# ヤマト運輸追跡自動化
+
+このプロジェクトは、ヤマト運輸の荷物追跡番号を使用して配送状況を自動的に確認するプロセスを自動化します。Google スプレッドシートから追跡番号を取得し、Selenium を使用して配送状況を確認し、結果をスプレッドシートに更新します。
+
+## 機能
+
+- 指定された Google スプレッドシートから追跡番号を取得
+- Selenium WebDriver を使用して追跡プロセスを自動化
+- 追跡結果とタイムスタンプでスプレッドシートを更新
+- 一度の実行で複数の追跡番号を処理
 
 ## 前提条件
 
-- Python 3.x
-- 仮想環境 (venv)
-- Chromeブラウザ
-- ChromeDriver
+このプロジェクトを使用する前に、以下の要件を満たしていることを確認してください：
 
-## セットアップ
+- Python 3.6 以上
+- Sheets API が有効化された Google Cloud Platform アカウント
+- Chrome WebDriver がインストールされ、システムの PATH に設定されていること
+
+## インストール
 
 1. このリポジトリをクローンします：
    ```
-   git clone https://github.com/あなたのユーザー名/リポジトリ名.git
-   cd リポジトリ名
+   git clone https://github.com/your-username/yamato-tracking-automation.git
+   cd yamato-tracking-automation
    ```
 
-2. 仮想環境を作成し、有効化します：
+2. 必要な Python パッケージをインストールします：
    ```
-   python -m venv selenium_env
-   source selenium_env/bin/activate  # Windowsの場合は `selenium_env\Scripts\activate`
-   ```
-
-3. 必要なパッケージをインストールします：
-   ```
-   pip install selenium
+   pip install -r requirements.txt
    ```
 
-4. ChromeDriverのインストール：
-   - [ChromeDriverのダウンロードページ](https://sites.google.com/a/chromium.org/chromedriver/downloads)から、使用しているChromeブラウザのバージョンに合ったChromeDriverをダウンロードします。
-   - ダウンロードしたChromeDriverをシステムのPATHが通っているディレクトリに配置するか、コードで明示的にパスを指定します。
+3. Google Cloud の認証情報を設定します：
+   - サービスアカウントを作成し、JSON キーファイルをダウンロードします
+   - キーファイルの名前を `selenium-spreadhseet-yamato-f83687fbeb1a.json` に変更し、プロジェクトのルートディレクトリに配置します
 
-## SeleniumとChromeDriverのバージョン不一致問題の対処
+## 設定
 
-SeleniumとChromeDriverのバージョンの不一致は、よく遭遇する問題です。このプロジェクトでは、以下の方法でこの問題に対処しています：
+1. `yamato_spread.py` を開き、必要に応じて Google スプレッドシートの設定を更新します。
 
-1. Chromeオプションの設定：
-   ```python
-   chrome_options = Options()
-   chrome_options.add_argument('--no-sandbox')
-   chrome_options.add_argument('--ignore-certificate-errors')
-   chrome_options.add_argument('--disable-dev-shm-usage')
-   chrome_options.add_experimental_option('excludeSwitches', ['enable-logging'])
-   chrome_options.add_argument('--disable-gpu')
-   chrome_options.add_argument('--ignore-ssl-errors')
-   chrome_options.add_argument("--disable-extensions")
-   ```
-   
-   これらのオプションにより、一般的な互換性の問題を回避し、安定した動作を実現しています。
-
-2. Service objectの使用：
-   ```python
-   service = Service()
-   driver = webdriver.Chrome(service=service, options=chrome_options)
-   ```
-   
-   Serviceオブジェクトを使用することで、ChromeDriverの設定をより柔軟に行えます。
-
-3. 定期的な更新：
-   ChromeブラウザとChromeDriverを定期的に更新し、最新のバージョンを使用することをお勧めします。
+2. Google スプレッドシートに「発送管理」という名前のワークシートがあり、追跡番号と結果のための列があることを確認します。
 
 ## 使用方法
 
-スクリプトを実行するには、以下のコマンドを使用します：
+メインスクリプトを実行します：
 
 ```
-python main.py
+python yamato_spread.py
 ```
 
-スクリプトは以下の動作を行います：
-1. ChromeブラウザでGoogleを開く
-2. "python selenium"を検索
-3. 結果が読み込まれるまで待機
-4. 見つかった結果の数を表示
-5. 最初の5つの検索結果のタイトルを表示
+スクリプトは以下の処理を行います：
+1. 指定された Google スプレッドシートから追跡番号を取得します
+2. Selenium を使用して各荷物の状態を確認します
+3. 結果とタイムスタンプでスプレッドシートを更新します
 
-## コードの説明
+## ファイルの説明
 
-このスクリプトは、Selenium WebDriverを使用して以下の操作を自動化します：
-- 最適なパフォーマンスと互換性のためのChromeオプションの設定
-- Googleのホームページを開く
-- 検索ボックスを見つけて"python selenium"と入力
-- 検索クエリの送信
-- 結果の読み込みを待機（time.sleepを使用）
-- 検索結果のタイトルの特定と抽出
-- 結果の数と最初の5つの結果タイトルの表示
+- `yamato_spread.py`: メインスクリプト。Google スプレッドシートとの連携、Selenium を使用した追跡処理、結果の更新を行います。
+- `kuroneko_yamato.py`: Selenium を使用してヤマト運輸の配送状況を確認する関数を含むモジュール。
 
-## 注意点
+## 貢献
 
-- このスクリプトは現在ヘッドレスモードを使用していません。ブラウザの動作を確認できます。
-- エラーハンドリングが実装されており、実行中に発生した例外をキャッチして表示します。
-- スクリプトの終了時、エラーが発生した場合でもブラウザは自動的に閉じられます。
-
-## トラブルシューティング
-
-SeleniumやChromeDriverに関する問題が発生した場合は、以下を試してください：
-
-1. Seleniumを最新バージョンに更新する
-2. Chromeブラウザを最新バージョンに更新する
-3. ChromeDriverをChromeブラウザのバージョンに合わせて更新する
-4. 仮想環境を再作成し、依存関係を再インストールする
+このプロジェクトへの貢献を歓迎します。リポジトリをフォークし、変更を加えたプルリクエストを提出してください。
 
 ## ライセンス
 
-[ここにライセンスを指定してください。例：MIT License]
+[ここにライセンスを指定してください。例：MIT ライセンス]
+
+## 免責事項
+
+このプロジェクトはヤマト運輸株式会社と提携しておらず、同社の承認を受けていません。ヤマト運輸の利用規約に従って責任を持って使用してください。

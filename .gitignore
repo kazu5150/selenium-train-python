@@ -1,0 +1,6 @@
+selenium-spreadhseet-yamato-f83687fbeb1a.json
+selenium_env/
+*.pyc
+__pycache__/
+*.so
+
